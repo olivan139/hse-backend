@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [forwardRef(() => UsersModule), JwtModule.register({
@@ -10,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
     signOptions: {
       expiresIn : '24h'
     }
-  })],
+  }), RolesModule],
   providers: [AuthService],
   controllers: [AuthController],
   exports: [AuthService, JwtModule]
