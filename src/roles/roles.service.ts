@@ -21,12 +21,16 @@ export class RolesService {
 
     async getRolesByUserId(idUser : number) {
         const userRoles = await this.userRolesRepository.findAll({where : {userId : idUser}})
-        const arr = JSON.parse(JSON.stringify(userRoles));
-        let roles = [];
-        for (let i = 0; i < arr.length; i++)
+        const roles = []
+        for (let i = 0; i < userRoles.length; i++)
         {
-            roles.push(await this.roleRepository.findOne({where : {id : arr[i].roleId}}));
+            const copy = await this.roleRepository.findByPk(Number(userRoles[i].roleId));
+            roles.push(copy.role);
         }
+        return roles;
+    }
+    async getAllRoles() {
+        const roles = await this.roleRepository.findAll({include: {all: true}});
         return roles;
     }
 }
