@@ -16,7 +16,7 @@ export class RolesController {
         return this.roleService.getRoleByValue(value);
     }
     @Get()
-    getRolesById(@Body() userId : number) {
-        return this.roleService.getRolesByUserId(userId);
+    getAll() {
+        return this.roleService.getAllRoles();
     }
 }
