@@ -4,13 +4,14 @@ import {InjectModel} from "@nestjs/sequelize";
 import {CreateUserDto} from "./dto/create-user.dto";
 import { RolesService } from 'src/roles/roles.service';
 import { addRoleDto } from './dto/add-role.dto';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-    private rolesService : RolesService) {}
+    private rolesService : RolesService, private jwtService : JwtService) {}
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
@@ -37,5 +38,19 @@ export class UsersService {
         }
         throw new HttpException("user or role has not been found", HttpStatus.NOT_FOUND)
 
+    }
+    async getUserbyJWT(req : Request) {
+        let token = String(req.headers["authorization"]).split(' ')[1]
+        if (!token)
+            throw new HttpException('Пользователь не авторизован', HttpStatus.FORBIDDEN)
+        const userId = Number(this.jwtService.decode(token)['id']);
+        const user = await this.userRepository.findOne({where: {id : userId}, attributes: [
+            'name', 
+            'surname', 
+            'patron', 
+            'group', 
+            'email',
+            'faculty' ]});
+        return user;
     }
   }
