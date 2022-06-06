@@ -17,5 +17,7 @@ export class Schedule extends Model<Schedule> {
     @Column({type: DataType.DATEONLY, allowNull: false})
     dayDate: string;
     @Column({type: DataType.DATE, allowNull: false})
-    time: string;
+    timeStart: string;
+    @Column({type: DataType.DATE, allowNull: false})
+    timeEnd: string;
 }

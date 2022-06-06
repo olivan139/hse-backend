@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import _ from 'lodash';
+import sequelize from 'sequelize';
 import { Op } from 'sequelize';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { Schedule } from './schedule.model';
@@ -14,15 +16,32 @@ export class ScheduleService {
     }
 
     async getSchedule(page : number = 1) {
-        const schedule = await this.scheduleRepository.findAndCountAll({
+        const date = new Date();
+        const newDate = new Date();
+
+        const count  = await this.scheduleRepository.count({where : {dayDate :{[Op.gte] : date}}})
+
+        date.setDate(date.getDate() + 7 * (page - 1));
+        newDate.setDate(newDate.getDate() + 7 * page);
+        const schedule = await this.scheduleRepository.findAll({
             where: {
-                dayDate : { [Op.gte] : new Date()}
+                dayDate : { [Op.gte] : date,
+                [Op.lt] : newDate}
             },
-            limit : 7,
-            offset : 7 * (page - 1),
-            order: [['time', 'ASC']]
+            order: [['dayDate', 'ASC'],  ['timeStart', 'ASC']]
         })
-        return schedule;
+        var result = schedule.reduce((acc, value) => {
+            if (!acc[value.dayDate]) {
+                acc[value.dayDate] = [];
+            }
+            acc[value.dayDate].push(value)
+            return acc;
+        }, {})
+
+        return {
+            "pageNum" : Math.ceil(count/7),
+            "timeTable" : result 
+        }; 
     }
     async getAll() {
         const schedule = await this.scheduleRepository.findAll();
