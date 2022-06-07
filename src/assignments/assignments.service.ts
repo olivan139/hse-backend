@@ -28,7 +28,7 @@ export class AssignmentsService {
         date.setDate(date.getDate() + 7 * (page - 1));
         newDate.setDate(newDate.getDate() + 7 * page);
         const assignment = await this.assignmentRepository.findAll({
-            attributes : ['deadlineType', 'subjectName', 'assigmentName', ' deadlineTime', 'sumbisionTIme'],
+            attributes : ['deadlineType', 'assigmentName', ' deadlineTime', 'sumbisionTIme'],
             where: {
                 deadlineTime : { [Op.gte] : date,
                 [Op.lt] : newDate}

@@ -7,8 +7,6 @@ export class Assignments extends Model<Assignments> {
     @Column({type: DataType.ENUM("hw", "cw"), allowNull: false})
     deadlineType: "hw" | "cw";
     @Column({type: DataType.STRING, allowNull: false})
-    subjectName: string;
-    @Column({type: DataType.STRING, allowNull: false})
     assignmentName: string;
     @Column({type: DataType.STRING, allowNull: false})
     courseName: string;
