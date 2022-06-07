@@ -10,10 +10,10 @@ export class Assignments extends Model<Assignments> {
     assignmentName: string;
     @Column({type: DataType.STRING, allowNull: false})
     courseName: string;
-    @Column({type: DataType.STRING, allowNull: true})
+    @Column({type: DataType.TEXT, allowNull: true})
     desc: string;
     @Column({type: DataType.DATE, allowNull: false})
     deadlineTime: string;
-    @Column({type: DataType.DATE, allowNull: false})
+    @Column({type: DataType.DATE, allowNull: true})
     submissionTime: string;
 }

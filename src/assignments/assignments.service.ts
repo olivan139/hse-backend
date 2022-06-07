@@ -14,8 +14,8 @@ export class AssignmentsService {
         return assignment;
     }
 
-    async getAssignmentDetailsById(id : number) {
-        const details = await this.assignmentRepository.findByPk(id);
+    async getAssignmentDetailsById(assId : number) {
+        const details = await this.assignmentRepository.findOne({where : {id : assId}});
         return details;
     }
 
@@ -28,7 +28,7 @@ export class AssignmentsService {
         date.setDate(date.getDate() + 7 * (page - 1));
         newDate.setDate(newDate.getDate() + 7 * page);
         const assignment = await this.assignmentRepository.findAll({
-            attributes : ['deadlineType', 'assigmentName', ' deadlineTime', 'sumbisionTIme'],
+            attributes : ['deadlineType', 'assignmentName', 'deadlineTime', 'submissionTime'],
             where: {
                 deadlineTime : { [Op.gte] : date,
                 [Op.lt] : newDate}
