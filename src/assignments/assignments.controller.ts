@@ -12,9 +12,9 @@ export class AssignmentsController {
         return this.assignmentsService.createAssignment(dto);
     }
 
-    @Get('/:value')
-    getDetails(@Param() value : number) {
-        return this.assignmentsService.getAssignmentDetailsById(value);
+    @Get('/details')
+    getDetails(@Query('id') id : number) {
+        return this.assignmentsService.getAssignmentDetailsById(id);
     }
     
     @Get()

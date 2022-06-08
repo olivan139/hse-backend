@@ -28,7 +28,7 @@ export class AssignmentsService {
         date.setDate(date.getDate() + 7 * (page - 1));
         newDate.setDate(newDate.getDate() + 7 * page);
         const assignment = await this.assignmentRepository.findAll({
-            attributes : ['deadlineType', 'assignmentName', 'deadlineTime', 'submissionTime'],
+            attributes : ['id', 'deadlineType', 'assignmentName', 'deadlineTime', 'submissionTime'],
             where: {
                 deadlineTime : { [Op.gte] : date,
                 [Op.lt] : newDate}
@@ -36,6 +36,7 @@ export class AssignmentsService {
             order: [['deadlineTime', 'ASC']]
         })
         var result = assignment.reduce((acc, value) => {
+            const date = new Date(value.deadlineTime)
             if (!acc[value.deadlineTime]) {
                 acc[value.deadlineTime] = [];
             }
