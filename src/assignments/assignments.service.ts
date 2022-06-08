@@ -36,11 +36,11 @@ export class AssignmentsService {
             order: [['deadlineTime', 'ASC']]
         })
         var result = assignment.reduce((acc, value) => {
-            const date = new Date(value.deadlineTime)
-            if (!acc[value.deadlineTime]) {
-                acc[value.deadlineTime] = [];
+            var date = new Date(value.deadlineTime)
+            if (!acc[date.toISOString()]) {
+                acc[date.toISOString()] = [];
             }
-            acc[value.deadlineTime].push(value)
+            acc[date.toISOString()].push(value)
             return acc;
         }, {})
 
