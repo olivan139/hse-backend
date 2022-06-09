@@ -37,10 +37,10 @@ export class AssignmentsService {
         })
         var result = assignment.reduce((acc, value) => {
             var date = new Date(value.deadlineTime)
-            if (!acc[date.toISOString()]) {
-                acc[date.toISOString()] = [];
+            if (!acc[String(date.getFullYear()) + '-' + String('0' + String(date.getMonth() + 1).slice(-2)) + '-' + String('0' + String(date.getDay() + 1).slice(-2))]) {
+                acc[String(date.getFullYear()) + '-' + String('0' + String(date.getMonth() + 1).slice(-2)) + '-' + String('0' + String(date.getDay() + 1).slice(-2))] = [];
             }
-            acc[date.toISOString()].push(value)
+            acc[String(date.getFullYear()) + '-' + String('0' + String(date.getMonth() + 1).slice(-2)) + '-' + String('0' + String(date.getDay() + 1).slice(-2))].push(value)
             return acc;
         }, {})
 
