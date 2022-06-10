@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Req, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -31,6 +32,11 @@ export class UsersController {
     @Get('/profile')
     getUser(@Req() req : Request) {
         return this.usersService.getUserbyJWT(req)
+    }
+    @Post('/avatar')
+    @UseInterceptors(FileInterceptor('image'))
+    addAvatar(@Req() req : Request, @UploadedFile() image : any) {
+       return this.usersService.addUserAvatar(req, image);
     }
 
 }

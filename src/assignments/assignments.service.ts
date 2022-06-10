@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { Assignments } from './assignments.model';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { GiveGradeDto } from './dto/give-grade.dto';
 
 @Injectable()
 export class AssignmentsService {
@@ -49,5 +50,16 @@ export class AssignmentsService {
             "pageNum" : Math.ceil(count/7),
             "assignments" : result 
         }; 
+    }
+    async giveScore(dto : GiveGradeDto) {
+        const updated = await this.assignmentRepository.update(
+            {
+                grade : dto.grade
+            }, 
+            {
+                where: {id : dto.id}
+            }
+        )
+        return updated;
     }
 }

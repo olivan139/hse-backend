@@ -16,4 +16,6 @@ export class Assignments extends Model<Assignments> {
     deadlineTime: string;
     @Column({type: DataType.DATE, allowNull: true})
     submissionTime: string;
+    @Column({type : DataType.NUMBER, allowNull : true})
+    grade : number
 }

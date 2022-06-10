@@ -5,13 +5,16 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import { RolesService } from 'src/roles/roles.service';
 import { addRoleDto } from './dto/add-role.dto';
 import { JwtService } from '@nestjs/jwt';
+import { FilesService } from 'src/files/files.service';
 
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-    private rolesService : RolesService, private jwtService : JwtService) {}
+    private rolesService : RolesService, 
+    private jwtService : JwtService,
+     private filesService : FilesService) {}
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
@@ -53,4 +56,27 @@ export class UsersService {
             'faculty' ]});
         return user;
     }
+    async getUserIdByJWT(req : Request) {
+        let token = String(req.headers["authorization"]).split(' ')[1]
+        if (!token)
+            throw new HttpException('Пользователь не авторизован', HttpStatus.FORBIDDEN)
+        const userId = Number(this.jwtService.decode(token)['id']);
+        return userId;
+    }
+
+    async addUserAvatar(req : Request, image : any) {
+        const userId = await this.getUserIdByJWT(req);
+        const avatar = await this.filesService.createFile(image);
+        const updateAvatar = await this.userRepository.update(
+            {
+                pic : avatar
+            },
+            {
+                where : {
+                    id : userId
+                }
+            }
+        ) 
+        return updateAvatar;
   }
+}
