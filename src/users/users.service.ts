@@ -79,4 +79,12 @@ export class UsersService {
         ) 
         return updateAvatar;
   }
+  async getUserImgURL(req :Request) {
+      const userId = await this.getUserIdByJWT(req);
+      const imgURL = await this.userRepository.findOne({
+          where: {id : userId},
+          attributes : ['pic']
+      })
+      return imgURL;
+  }
 }

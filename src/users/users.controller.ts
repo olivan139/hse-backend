@@ -38,5 +38,8 @@ export class UsersController {
     addAvatar(@Req() req : Request, @UploadedFile() image : any) {
        return this.usersService.addUserAvatar(req, image);
     }
-
+    @Get('/avatar')
+    getImageURL(@Req() req : Request) {
+        return this.usersService.getUserImgURL(req);
+    }
 }
