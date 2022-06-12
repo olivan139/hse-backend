@@ -13,12 +13,12 @@ import { ChatMessageDto } from './dto/chat-message.dto';
  })
  
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private chatService: ChatsService) {}
+  constructor(private chatService: ChatsService, private payload : ChatMessageDto) {}
  
   @WebSocketServer() server: Server;
  
   @SubscribeMessage('sendMessage')
-  async handleSendMessage(client: Socket, payload: ChatMessageDto): Promise<void> {
+  async handleSendMessage(client: Socket, payload): Promise<void> {
     await this.chatService.createMessage(payload);
   this.server.emit('recMessage', payload);
   }
