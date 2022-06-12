@@ -16,6 +16,8 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { AppGateway } from './chats/app.gateway';
 import { ChatsModule } from './chats/chats.module';
 import * as path from "path";
+import { Assignments } from "./assignments/assignments.model";
+import { UserMessages } from "./chats/userMessages.model";
 
 
 @Module({
@@ -40,7 +42,7 @@ import * as path from "path";
               rejectUnauthorized: false
             }
         },
-        models: [User, Role, UserRoles, Schedule],
+        models: [User, Role, UserRoles, Schedule, Assignments, UserMessages],
         autoLoadModels: true
       }),
         UsersModule,
