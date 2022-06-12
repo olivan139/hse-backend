@@ -13,7 +13,7 @@ import { UserRoles } from "./roles/user-roles.model";
 import { Schedule } from "./schedule/schedule.model";
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { AppGateway } from './chats/app.gateway';
+// import { AppGateway } from './chats/app.gateway';
 import { ChatsModule } from './chats/chats.module';
 import * as path from "path";
 import { Assignments } from "./assignments/assignments.model";
@@ -22,7 +22,7 @@ import { UserMessages } from "./chats/userMessages.model";
 
 @Module({
     controllers: [],
-    providers: [AppGateway],
+    providers: [],
     imports: [ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static'),
     }),
