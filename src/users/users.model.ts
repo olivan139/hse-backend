@@ -1,4 +1,6 @@
 import {BelongsToMany, Column, DataType, HasMany, Model, Table} from "sequelize-typescript";
+import { Chat } from "src/chats/chats.model";
+import { UserMessages } from "src/chats/userMessages.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user-roles.model";
 
@@ -33,6 +35,8 @@ export class User extends Model<User, UserCreationAttrs> {
     pic: string;
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
+    @BelongsToMany(() => User, () => UserMessages)
+    chats: Chat[];
 
 
 }

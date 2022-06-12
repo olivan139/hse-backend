@@ -13,12 +13,14 @@ import { UserRoles } from "./roles/user-roles.model";
 import { Schedule } from "./schedule/schedule.model";
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { AppGateway } from './chats/app.gateway';
+import { ChatsModule } from './chats/chats.module';
 import * as path from "path";
 
 
 @Module({
     controllers: [],
-    providers: [],
+    providers: [AppGateway],
     imports: [ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static'),
     }),
@@ -47,7 +49,8 @@ import * as path from "path";
         ScheduleModule,
         RolesModule,
         AuthModule,
-        FilesModule
+        FilesModule,
+        ChatsModule
     ],
 })
 export class AppModule {}
