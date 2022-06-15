@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { AddGroupDto } from './dto/add-group.dto';
 import { addRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -23,8 +24,8 @@ export class UsersController {
         return this.usersService.getAllUsers();
     }
 
-    @Roles('ADMIN')
-    @UseGuards(RolesGuard)
+    // @Roles('STUDENT')
+    // @UseGuards(RolesGuard)   
     @Post('/role')
     addRole(@Body() dto : addRoleDto) {
         return this.usersService.addRole(dto)
@@ -42,8 +43,8 @@ export class UsersController {
     getImageURL(@Req() req : Request) {
         return this.usersService.getUserImgURL(req);
     }
-    @Post()
-    addGroup(@Req() req : Request, @Body() name : string) {
-        return this.usersService.addGroup(req, name);
+    @Post('group')
+    addGroup(@Req() req : Request, @Body() dto : AddGroupDto) {
+        return this.usersService.addGroup(req, dto);
     }
 }

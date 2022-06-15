@@ -7,6 +7,7 @@ import { addRoleDto } from './dto/add-role.dto';
 import { JwtService } from '@nestjs/jwt';
 import { FilesService } from 'src/files/files.service';
 import { GroupsService } from 'src/groups/groups.service';
+import { AddGroupDto } from './dto/add-group.dto';
 
 
 @Injectable()
@@ -43,6 +44,10 @@ export class UsersService {
         }
         throw new HttpException("user or role has not been found", HttpStatus.NOT_FOUND)
 
+    }
+    async updateCurrRole(userEmail : string, role : string) {
+        const user = await this.userRepository.update({currentRole : role}, {where: {email : userEmail}})
+        return user;
     }
     async getUserbyJWT(req : Request) {
         let token = String(req.headers["authorization"]).split(' ')[1]
@@ -85,10 +90,10 @@ export class UsersService {
       return imgURL;
   }
 
-  async addGroup(req : Request, groupName : string) {
+  async addGroup(req : Request, dto : AddGroupDto) {
       const user = await this.getUserbyJWT(req);
-      const group = await this.groupService.findGroupByName(groupName);
-      user.$set('groupId', group.id)
+      const group = await this.groupService.findGroupByName(dto.name);
+      user.$add('groupId', group.id)
       user.groupId = group.id;
       return user;
   }

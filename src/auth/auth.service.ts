@@ -15,6 +15,7 @@ export class AuthService {
 
     async login(userDto : UserAuthDto) {
         const user = await this.validateUser(userDto);
+        await this.userService.updateCurrRole(userDto.email, userDto.role)
         return (this.generateToken(user));
     }
     async registration(userDto : CreateUserDto){
