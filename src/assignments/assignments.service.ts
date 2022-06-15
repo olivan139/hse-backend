@@ -1,17 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
+import { CoursesService } from 'src/courses/courses.service';
+import { UsersService } from 'src/users/users.service';
 import { Assignments } from './assignments.model';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { GiveGradeDto } from './dto/give-grade.dto';
 
 @Injectable()
 export class AssignmentsService {
-    constructor(@InjectModel(Assignments) private assignmentRepository: typeof Assignments) {}
+    constructor(@InjectModel(Assignments) private assignmentRepository: typeof Assignments,
+    private courseService : CoursesService) {}
 
     async createAssignment(dto : CreateAssignmentDto)
     {
+        const courseId = dto.courseId
+        delete dto.courseId;
         const assignment = await this.assignmentRepository.create(dto);
+        const course = await this.courseService.getCourseById(courseId);
+        assignment.$set('course', course.id);
+        assignment.course = course;
         return assignment;
     }
 
@@ -20,11 +28,11 @@ export class AssignmentsService {
         return details;
     }
 
-    async getAssignmentByPage(page : number = 1) {
+    async getAssignmentByPage(courseId : number, page : number = 1) {
         const date = new Date();
         const newDate = new Date();
-
-        const count  = await this.assignmentRepository.count({where : {deadlineTime :{[Op.gte] : date}}})
+        const currCourse = await this.courseService.getCourseById(courseId);
+        const count  = await this.assignmentRepository.count({where : {course : currCourse,deadlineTime :{[Op.gte] : date}}})
 
         date.setDate(date.getDate() + 7 * (page - 1));
         newDate.setDate(newDate.getDate() + 7 * page);

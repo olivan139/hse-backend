@@ -6,6 +6,7 @@ import { RolesService } from 'src/roles/roles.service';
 import { addRoleDto } from './dto/add-role.dto';
 import { JwtService } from '@nestjs/jwt';
 import { FilesService } from 'src/files/files.service';
+import { GroupsService } from 'src/groups/groups.service';
 
 
 @Injectable()
@@ -14,7 +15,8 @@ export class UsersService {
     constructor(@InjectModel(User) private userRepository: typeof User,
     private rolesService : RolesService, 
     private jwtService : JwtService,
-     private filesService : FilesService) {}
+    private filesService : FilesService,
+    private groupService : GroupsService ) {}
 
     async createUser(dto: CreateUserDto) {
         const user = await this.userRepository.create(dto);
@@ -47,13 +49,8 @@ export class UsersService {
         if (!token)
             throw new HttpException('Пользователь не авторизован', HttpStatus.FORBIDDEN)
         const userId = Number(this.jwtService.decode(token)['id']);
-        const user = await this.userRepository.findOne({where: {id : userId}, attributes: [
-            'name', 
-            'surname', 
-            'patron', 
-            'group', 
-            'email',
-            'faculty' ]});
+        const user = await this.userRepository.findOne({where: {id : userId}, attributes: {exclude : ['password']}
+        });
         return user;
     }
     async getUserIdByJWT(req : Request) {
@@ -86,5 +83,13 @@ export class UsersService {
           attributes : ['pic']
       })
       return imgURL;
+  }
+
+  async addGroup(req : Request, groupName : string) {
+      const user = await this.getUserbyJWT(req);
+      const group = await this.groupService.findGroupByName(groupName);
+      user.$set('groupId', group.id)
+      user.groupId = group.id;
+      return user;
   }
 }

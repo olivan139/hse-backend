@@ -4,5 +4,4 @@ export class CreateUserDto{
     readonly name: string;
     readonly surname: string;
     readonly faculty: string;
-    readonly group: string;
 }

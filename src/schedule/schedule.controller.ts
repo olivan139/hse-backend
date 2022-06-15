@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { ScheduleService } from './schedule.service';
 
@@ -7,16 +7,16 @@ export class ScheduleController {
 
     constructor(private scheduleService : ScheduleService) {}
     @Post()
-    async create(@Body() dto : CreateScheduleDto) {
+    create(@Body() dto : CreateScheduleDto) {
         return this.scheduleService.createLesson(dto);
     }
     @Get()
-    async getForWeek(@Query('page') page: number) {
-        const schedule = await this.scheduleService.getSchedule(page);
+    getForWeek(@Req() req : any, @Query('page') page: number) {
+        const schedule = this.scheduleService.getSchedule(req, page);
         return schedule;
     }
     @Get('/all')
-    async getAllVal() {
+    getAllVal() {
         return this.scheduleService.getAll();
     }
 }

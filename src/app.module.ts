@@ -13,11 +13,14 @@ import { UserRoles } from "./roles/user-roles.model";
 import { Schedule } from "./schedule/schedule.model";
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
-// import { AppGateway } from './chats/app.gateway';
 import { ChatsModule } from './chats/chats.module';
 import * as path from "path";
 import { Assignments } from "./assignments/assignments.model";
 import { UserMessages } from "./chats/userMessages.model";
+import { GroupsModule } from './groups/groups.module';
+import { Group } from "./groups/groups.model";
+import { Course } from "./courses/courses.model";
+import { CourseMembers } from "./courses/course-members.model";
 
 
 @Module({
@@ -42,7 +45,7 @@ import { UserMessages } from "./chats/userMessages.model";
               rejectUnauthorized: false
             }
         },
-        models: [User, Role, UserRoles, Schedule, Assignments, UserMessages],
+        models: [User, Role, UserRoles, Schedule, Assignments, UserMessages, Group, Course, CourseMembers],
         autoLoadModels: true
       }),
         UsersModule,
@@ -52,7 +55,8 @@ import { UserMessages } from "./chats/userMessages.model";
         RolesModule,
         AuthModule,
         FilesModule,
-        ChatsModule
+        ChatsModule,
+        GroupsModule
     ],
 })
 export class AppModule {}

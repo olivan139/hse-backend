@@ -42,4 +42,8 @@ export class UsersController {
     getImageURL(@Req() req : Request) {
         return this.usersService.getUserImgURL(req);
     }
+    @Post()
+    addGroup(@Req() req : Request, @Body() name : string) {
+        return this.usersService.addGroup(req, name);
+    }
 }

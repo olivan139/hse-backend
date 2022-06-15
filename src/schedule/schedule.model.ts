@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Group } from "src/groups/groups.model";
 
 @Table({tableName: 'schedule'})
 export class Schedule extends Model<Schedule> {
@@ -14,6 +15,9 @@ export class Schedule extends Model<Schedule> {
     zoomLink: string;
     @Column({type: DataType.STRING, allowNull: true})
     address: string;
+    @ForeignKey(() => Group)
+    @Column({type: DataType.INTEGER})
+    groupId: number;
     @Column({type: DataType.DATEONLY, allowNull: false})
     dayDate: string;
     @Column({type: DataType.DATE, allowNull: false})
