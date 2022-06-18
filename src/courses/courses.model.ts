@@ -11,12 +11,12 @@ export class Course extends Model<Course> {
     courseName: string;
     @Column({type: DataType.TEXT, allowNull: false})
     courseDesc: string;
-    @Column({type: DataType.STRING, allowNull: false})
+    @Column({type: DataType.STRING, allowNull: true})
     courseCode: string;
     @BelongsTo(() => User)
     owner : User;
     @ForeignKey(() => User)
-    ownerId: number
+    ownerId: number;
     @BelongsToMany(()=> User, () => CourseMembers)
     members : User[];
     @HasMany(() => Assignments)

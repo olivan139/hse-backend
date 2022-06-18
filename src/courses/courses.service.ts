@@ -15,9 +15,11 @@ export class CoursesService {
         const course = await this.courseRepository.create(dto);
         await course.$set('owner', user.id)
         await course.$set('members', [user.id])
-        const courseId = course.id
-        const result = await this.courseRepository.update({courseCode : randomBytes(2).toString().toUpperCase()}, {where : {id : courseId}})
-        return result;
+        const courseId = course.id;
+        const code = randomBytes(2).toString('hex').toUpperCase();
+        const result = await this.courseRepository.update({courseCode : code}, {where : {id : courseId}})
+        course.courseCode = code;
+        return course;
     }
 
     async getCourseById(courseId : number) {

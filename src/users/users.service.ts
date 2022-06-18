@@ -93,7 +93,7 @@ export class UsersService {
   async addGroup(req : Request, dto : AddGroupDto) {
       const user = await this.getUserbyJWT(req);
       const group = await this.groupService.findGroupByName(dto.name);
-      user.$add('groupId', group.id)
+      const result = await this.userRepository.update({groupId : group.id}, {where : {id : user.id}})
       user.groupId = group.id;
       return user;
   }
