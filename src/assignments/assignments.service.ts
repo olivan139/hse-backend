@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
+import { Course } from 'src/courses/courses.model';
 import { CoursesService } from 'src/courses/courses.service';
-import { UsersService } from 'src/users/users.service';
 import { Assignments } from './assignments.model';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { GetAssignmentDto } from './dto/get-assignment.dto';
 import { GiveGradeDto } from './dto/give-grade.dto';
 
 @Injectable()
@@ -28,35 +29,37 @@ export class AssignmentsService {
         return details;
     }
 
-    async getAssignmentByPage(courseId : number, page : number = 1) {
+    async getAssignmentByPage(courseId : number = 1) {
         const date = new Date();
-        const newDate = new Date();
-        const currCourse = await this.courseService.getCourseById(courseId);
-        const count  = await this.assignmentRepository.count({where : {course : currCourse,deadlineTime :{[Op.gte] : date}}})
+        const count  = await this.assignmentRepository.count({
+            include : {
+                model : Course,
+                attributes : [],
+                where : {
+                   id : courseId
+                }
+            },
+            where : {
+                deadlineTime :{
+                    [Op.gte] : date}
+                }
+                })
 
-        date.setDate(date.getDate() + 7 * (page - 1));
-        newDate.setDate(newDate.getDate() + 7 * page);
         const assignment = await this.assignmentRepository.findAll({
-            attributes : ['id', 'deadlineType', 'assignmentName', 'deadlineTime', 'courseName', 'submissionTime'],
-            where: {
-                deadlineTime : { [Op.gte] : date,
-                [Op.lt] : newDate}
+            attributes : ['id', 'deadlineType', 'assignmentName', 'deadlineTime', 'submissionTime'],
+            include : {
+                model : Course,
+                attributes : [],
+                where : {
+                   id : courseId
+                }
             },
             order: [['deadlineTime', 'ASC']]
         })
-        var result = assignment.reduce((acc, value) => {
-            var date = new Date(value.deadlineTime)
-            console.log(date.getDate())
-            if (!acc[String(date.getFullYear()) + '-' + String('0' + (date.getMonth() + 1)).slice(-2) + '-' + String('0' + date.getDate()).slice(-2)]) {
-                acc[String(date.getFullYear()) + '-' + String('0' + (date.getMonth() + 1)).slice(-2) + '-' + String('0' + date.getDate()).slice(-2)] = [];
-            }
-            acc[String(date.getFullYear()) + '-' + String('0' + (date.getMonth() + 1)).slice(-2) + '-' + String('0' + date.getDate()).slice(-2)].push(value)
-            return acc;
-        }, {})
 
         return {
-            "pageNum" : Math.ceil(count/7),
-            "assignments" : result 
+            "numOfElements" : count,
+            "assignments" : assignment 
         }; 
     }
     async giveScore(dto : GiveGradeDto) {

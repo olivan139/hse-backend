@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { randomBytes } from 'crypto';
+import { User } from 'src/users/users.model';
 import { UsersService } from 'src/users/users.service';
 import { Course } from './courses.model';
 import { CreateCourseDto } from './dto/create-course.dto';

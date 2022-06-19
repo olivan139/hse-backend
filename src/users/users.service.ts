@@ -9,7 +9,6 @@ import { FilesService } from 'src/files/files.service';
 import { GroupsService } from 'src/groups/groups.service';
 import { AddGroupDto } from './dto/add-group.dto';
 import { Course } from 'src/courses/courses.model';
-import { CourseMembers } from 'src/courses/course-members.model';
 
 
 @Injectable()

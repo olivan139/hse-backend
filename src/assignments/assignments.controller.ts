@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AssignmentsService } from './assignments.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { GetAssignmentDto } from './dto/get-assignment.dto';
 import { GiveGradeDto } from './dto/give-grade.dto';
 
 @Controller('assignments')
@@ -18,9 +19,9 @@ export class AssignmentsController {
         return this.assignmentsService.getAssignmentDetailsById(id);
     }
     
-    @Get()
-    getAssignmentsList(@Query('page') page: number) {
-        return this.assignmentsService.getAssignmentByPage(page);
+    @Get('/assignment-list')
+    getAssignmentsList(@Query('id') id: number) {
+        return this.assignmentsService.getAssignmentByPage(id);
     }
 
     @Post('/grade')
