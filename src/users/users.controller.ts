@@ -47,4 +47,8 @@ export class UsersController {
     addGroup(@Req() req : Request, @Body() dto : AddGroupDto) {
         return this.usersService.addGroup(req, dto);
     }
+    @Get('/courses')
+    getCourses(@Req() req : Request) {
+        return this.usersService.getCourses(req);
+    }
 }

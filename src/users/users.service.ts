@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { FilesService } from 'src/files/files.service';
 import { GroupsService } from 'src/groups/groups.service';
 import { AddGroupDto } from './dto/add-group.dto';
+import { Course } from 'src/courses/courses.model';
+import { CourseMembers } from 'src/courses/course-members.model';
 
 
 @Injectable()
@@ -97,4 +99,19 @@ export class UsersService {
       user.groupId = group.id;
       return user;
   }
+
+  async getCourses(req : any) {
+    const user = await this.getUserbyJWT(req);
+    const courses = await this.userRepository.findAll({
+        include : {
+            model : Course,
+            attributes : ['id', 'courseName'],
+           // include : [{model : CourseMembers, attributes : []}]
+        },
+        attributes : [],
+        where: {id : user.id},
+        raw : true
+    })
+    return courses;
+   }
 }

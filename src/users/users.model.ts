@@ -3,6 +3,7 @@ import { Assignments } from "src/assignments/assignments.model";
 import { Chat } from "src/chats/chats.model";
 import { UserMessages } from "src/chats/userMessages.model";
 import { CourseMembers } from "src/courses/course-members.model";
+import { Course } from "src/courses/courses.model";
 import { Group } from "src/groups/groups.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user-roles.model";
@@ -43,8 +44,8 @@ export class User extends Model<User, UserCreationAttrs> {
     roles: Role[];
     @BelongsToMany(() => User, () => UserMessages)
     chats: Chat[];
-    @BelongsToMany(()=> User, () => CourseMembers)
-    courses : User[];
+    @BelongsToMany(()=> Course, () => CourseMembers)
+    courses : Course[];
     @HasMany(() => Assignments)
     assignments: Assignments[];
 
