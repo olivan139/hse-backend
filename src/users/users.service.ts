@@ -111,8 +111,7 @@ export class UsersService {
            }
         },
         attributes : [],
-        where: {id : user.id},
-        raw : true
+        where: {id : user.id}
     })
     return courses;
    }
