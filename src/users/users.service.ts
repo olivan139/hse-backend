@@ -106,7 +106,9 @@ export class UsersService {
         include : {
             model : Course,
             attributes : ['id', 'courseName'],
-           // include : [{model : CourseMembers, attributes : []}]
+           through : {
+               attributes : []
+           }
         },
         attributes : [],
         where: {id : user.id},
