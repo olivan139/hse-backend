@@ -113,6 +113,6 @@ export class UsersService {
         attributes : [],
         where: {id : user.id}
     })
-    return courses;
+    return courses[0];
    }
 }
