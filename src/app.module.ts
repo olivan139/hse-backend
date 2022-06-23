@@ -21,6 +21,7 @@ import { GroupsModule } from './groups/groups.module';
 import { Group } from "./groups/groups.model";
 import { Course } from "./courses/courses.model";
 import { CourseMembers } from "./courses/course-members.model";
+import { UserAssignments } from "./assignments/user-assignments.model";
 
 
 @Module({
@@ -45,7 +46,7 @@ import { CourseMembers } from "./courses/course-members.model";
               rejectUnauthorized: false
             }
         },
-        models: [User, Role, UserRoles, Schedule, Assignments, UserMessages, Group, Course, CourseMembers],
+        models: [User, Role, UserRoles, Schedule, Assignments, UserMessages, Group, Course, CourseMembers, UserAssignments],
         autoLoadModels: true
       }),
         UsersModule,

@@ -1,6 +1,7 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Course } from "src/courses/courses.model";
 import { User } from "src/users/users.model";
+import { UserAssignments } from "./user-assignments.model";
 
 @Table({tableName: 'assignments'})
 export class Assignments extends Model<Assignments> {
@@ -14,18 +15,12 @@ export class Assignments extends Model<Assignments> {
     desc: string;
     @Column({type: DataType.DATE, allowNull: false})
     deadlineTime: string;
-    @Column({type: DataType.DATE, allowNull: true})
-    submissionTime: string;
-    @Column({type: DataType.STRING, allowNull: true})
-    submissionFiles: string;
-    @Column({type : DataType.INTEGER, allowNull : true})
-    grade : number;
     @BelongsTo(() => Course)
     course : Course;
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, 'authorId')
     author : User;
-    @ForeignKey(() => User)
-    userId: number
+    @BelongsToMany(() => User, () => UserAssignments)
+    students: User[];
     @ForeignKey(() => Course)
-    courseId: number
+    courseId: number;
 }

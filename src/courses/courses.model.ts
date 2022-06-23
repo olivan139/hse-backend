@@ -13,10 +13,8 @@ export class Course extends Model<Course> {
     courseDesc: string;
     @Column({type: DataType.STRING, allowNull: true})
     courseCode: string;
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, 'ownerId')
     owner : User;
-    @ForeignKey(() => User)
-    ownerId: number;
     @BelongsToMany(()=> User, () => CourseMembers)
     members : User[];
     @HasMany(() => Assignments)

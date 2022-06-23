@@ -24,6 +24,11 @@ export class CoursesController {
         return this.courseService.getCourseById(id);
     }
 
+    @Get('/enter') 
+    addMember(@Req() req : any, @Query('code') code : string) {
+        return this.courseService.addMember(req, code);
+    }
+
 
 
 

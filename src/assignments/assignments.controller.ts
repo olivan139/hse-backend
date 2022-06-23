@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { AssignmentsService } from './assignments.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { GetAssignmentDto } from './dto/get-assignment.dto';
@@ -10,8 +10,8 @@ export class AssignmentsController {
     constructor(private assignmentsService: AssignmentsService) {}
 
     @Post()
-    create(@Body() dto : CreateAssignmentDto) {
-        return this.assignmentsService.createAssignment(dto);
+    create(@Req() req : any, @Body() dto : CreateAssignmentDto) {
+        return this.assignmentsService.createAssignment(req, dto);
     }
 
     @Get('/details')
@@ -24,8 +24,8 @@ export class AssignmentsController {
         return this.assignmentsService.getAssignmentByPage(id);
     }
 
-    @Post('/grade')
-    postGrade(@Body() dto : GiveGradeDto) {
-        return this.assignmentsService.giveScore(dto);
-    }
+    // @Post('/grade')
+    // postGrade(@Body() dto : GiveGradeDto) {
+    //     return this.assignmentsService.giveScore(dto);
+    // }
 }

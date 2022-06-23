@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { Course } from 'src/courses/courses.model';
 import { CoursesService } from 'src/courses/courses.service';
+import { UsersService } from 'src/users/users.service';
 import { Assignments } from './assignments.model';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
-import { GetAssignmentDto } from './dto/get-assignment.dto';
 import { GiveGradeDto } from './dto/give-grade.dto';
 
 @Injectable()
 export class AssignmentsService {
     constructor(@InjectModel(Assignments) private assignmentRepository: typeof Assignments,
-    private courseService : CoursesService) {}
+    @Inject(forwardRef(() => CoursesService)) private courseService : CoursesService,
+    private userService : UsersService
+    ) {}
 
-    async createAssignment(dto : CreateAssignmentDto)
+    async createAssignment(req : any, dto : CreateAssignmentDto)
     {
         const courseId = dto.courseId
         delete dto.courseId;
         const assignment = await this.assignmentRepository.create(dto);
-        const course = await this.courseService.getCourseById(courseId);
-        assignment.$set('course', course.id);
-        assignment.course = course;
+        const members = await this.userService.getUsersByCourseId(courseId);
+        assignment.$set('course', courseId);
+        for (var i = 0; i < members.length; i++)
+            members[i].$add('assignment', assignment.id);
         return assignment;
     }
 
@@ -62,15 +65,19 @@ export class AssignmentsService {
             "assignments" : assignment 
         }; 
     }
-    async giveScore(dto : GiveGradeDto) {
-        const updated = await this.assignmentRepository.update(
-            {
-                grade : dto.grade
-            }, 
-            {
-                where: {id : dto.id}
-            }
-        )
-        return updated;
+    // async giveScore(dto : GiveGradeDto) {
+    //     const updated = await this.assignmentRepository.update(
+    //         {
+    //             grade : dto.grade
+    //         }, 
+    //         {
+    //             where: {id : dto.id}
+    //         }
+    //     )
+    //     return updated;
+    // }
+    async getAssignmentsByCourseId(id : number) {
+        const assignments = await this.assignmentRepository.findAll({where : {courseId : id}})
+        return assignments;
     }
 }

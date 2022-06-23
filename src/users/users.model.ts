@@ -1,5 +1,6 @@
 import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import { Assignments } from "src/assignments/assignments.model";
+import { UserAssignments } from "src/assignments/user-assignments.model";
 import { Chat } from "src/chats/chats.model";
 import { UserMessages } from "src/chats/userMessages.model";
 import { CourseMembers } from "src/courses/course-members.model";
@@ -46,7 +47,7 @@ export class User extends Model<User, UserCreationAttrs> {
     chats: Chat[];
     @BelongsToMany(()=> Course, () => CourseMembers)
     courses : Course[];
-    @HasMany(() => Assignments)
+    @BelongsToMany(() => Assignments, () => UserAssignments)
     assignments: Assignments[];
 
 

@@ -9,6 +9,9 @@ import { FilesService } from 'src/files/files.service';
 import { GroupsService } from 'src/groups/groups.service';
 import { AddGroupDto } from './dto/add-group.dto';
 import { Course } from 'src/courses/courses.model';
+import { CourseMembers } from 'src/courses/course-members.model';
+import { UserAssignments } from 'src/assignments/user-assignments.model';
+import { Assignments } from 'src/assignments/assignments.model';
 
 
 @Injectable()
@@ -113,5 +116,46 @@ export class UsersService {
         where: {id : user.id}
     })
     return courses[0];
+   }
+
+   async getAssignmentsForUser(req : any) {
+    const userId = await this.getUserIdByJWT(req);
+    const assignments = await this.userRepository.findAll({
+        where : {
+            id : userId
+        },
+        include : {
+            model : UserAssignments,
+            attributes : ['grade', 'file'],
+            include : [Assignments],
+            }
+        })
+        return assignments;
+   }
+
+   async getUsersByCourseId(courseId : number) {
+    const users = await this.userRepository.findAll({
+        include : {
+            model : Course,
+            where : {
+                id : courseId
+            }
+        }
+    })
+    return users;
+   }
+   
+   async getAssignments(req : any) {
+    const userId = await this.getUserIdByJWT(req);
+    const assignments = await this.userRepository.findAll({
+        attributes : [],
+        where : {
+            id : userId,
+        },
+        include : {
+            model : Assignments
+        }
+    })
+    return assignments[0];
    }
 }

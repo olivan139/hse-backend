@@ -51,4 +51,9 @@ export class UsersController {
     getCourses(@Req() req : Request) {
         return this.usersService.getCourses(req);
     }
+
+    @Get('/assignments')
+    getAss(@Req() req : Request) {
+        return this.usersService.getAssignments(req);
+    }
 }
